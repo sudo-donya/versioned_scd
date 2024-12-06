@@ -12,6 +12,7 @@ dependencies = [
     "dbt-osmosis>=0.13.2",
     "dbt-postgres>=1.8.1",
     "dbt-snowflake>=1.8.4",
+    "dbt-spark>=1.8.0",
     "dbt-trino>=1.8.4",
     "pre-commit>=4.0.1",
     "psycopg2-binary>=2.9.10",
