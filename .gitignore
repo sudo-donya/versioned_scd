@@ -1,0 +1,9 @@
+.venv
+.vscode
+
+target/
+logs/
+dbt_packages/
+.python-version
+integration_tests/.spark-warehouse
+integration_tests/.hive-metastore

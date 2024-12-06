@@ -1,0 +1,19 @@
+[project]
+name = "versioned-scd"
+version = "0.1.0"
+description = "A custom-made dbt package for a complex materialization of slowly-changing dimension of type 2"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "asyncpg>=0.30.0",
+    "dbt-bigquery",
+    "dbt-core>=1.8.1",
+    "dbt-duckdb>=1.9.1",
+    "dbt-osmosis>=0.13.2",
+    "dbt-postgres>=1.8.1",
+    "dbt-snowflake>=1.8.4",
+    "dbt-trino>=1.8.4",
+    "pre-commit>=4.0.1",
+    "psycopg2-binary>=2.9.10",
+    "sqlfluff-templater-dbt",
+]
