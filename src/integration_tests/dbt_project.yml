@@ -1,0 +1,40 @@
+profile: integration_tests
+name: 'integration_tests'
+version: '0.0.1'
+
+require-dbt-version: ">=1.8.1"
+macro-paths: ["macros"]
+model-paths: ["models"]
+test-paths: ["tests"]
+analysis-paths: ["analysis"]
+seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
+asset-paths: ["assets"]
+docs-paths: ["docs"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_modules", "dbt_packages"]
+
+models:
+  integration_tests:
+    intermediate:
+      +schema: intermediate
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: scd2_plus
+
+seeds:
+  integration_tests:
+    +persist_docs:
+      relation: true
+      columns: true
+    +schema: seed
+
+vars:
+  loaddate: '1900-01-01'
+
+flags:
+  require_explicit_package_overrides_for_builtin_materializations: false
+  partial_parse: True
+  send_anonymous_usage_stats: False

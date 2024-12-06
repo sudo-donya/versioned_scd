@@ -1,0 +1,37 @@
+[sqlfluff]
+templater = dbt
+dialect = postgres
+large_file_skip_char_limit = 0
+large_file_skip_byte_limit = 0
+processes = 4
+exclude_rules = aliasing.forbid, structure.using, structure.column_order, references.quoting
+max_line_length = 120
+
+[sqlfluff:indentation]
+allow_implicit_indents = True
+# indented_on_contents = False
+# template_blocks_indent = False # default True
+
+[sqlfluff:layout:type:comma]
+line_position = leading
+
+[sqlfluff:rules:layout.indent] # Indentation not consistent with the previous lines
+indent_unit = space
+
+[sqlfluff:rules:capitalisation.keywords] # Keywords
+capitalisation_policy = lower
+
+[sqlfluff:rules:aliasing.table] # Implicit/explicit aliasing of table
+aliasing = explicit
+
+[sqlfluff:rules:aliasing.column] # Implicit/explicit aliasing of columns.
+aliasing = explicit
+
+[sqlfluff:rules:capitalisation.identifiers]  # Unquoted identifiers
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:references.keywords]  # Keywords should not be used as identifiers.
+ignore_words = comment, xml, data, cost, password, message_text, floor, domain, period, label, comment
+
+[sqlfluff:rules:capitalisation.functions] # Inconsistent capitalisation of function names
+extended_capitalisation_policy = lower

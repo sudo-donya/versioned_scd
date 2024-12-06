@@ -1,0 +1,12 @@
+profile: versioned_scd
+name: 'versioned_scd'
+version: '0.1.0'
+
+require-dbt-version: ">=1.8.1"
+
+vars:
+  mute_ensure_materialization_override: true
+
+clean-targets:
+  - "target"
+  - "dbt_packages"

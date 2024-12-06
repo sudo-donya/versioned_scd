@@ -1,0 +1,159 @@
+version: 2
+sources:
+  - name: integration_tests_seed_data
+    tables:
+      - name: scd2_plus_staging_data
+        columns:
+          - name: Id
+          - name: Name
+          - name: Label
+          - name: Description
+          - name: Amount
+          - name: SourceSystem_UpdatedDate
+          - name: Staging_LoadDate
+          - name: Comment
+      - name: dim_scd2_plus_full_config_test_data
+        columns:
+          - name: component_id
+          - name: valid_from_dt
+          - name: valid_to_dt
+          - name: version
+          - name: id
+          - name: label
+          - name: amount
+          - name: component_name
+          - name: date_of_birth
+          - name: component_description
+          - name: loaded_at
+          - name: updated_at
+          - name: scd_hash
+
+models:
+  - name: dim_scd2_plus_min_config_one_time_load
+    description: "To demo minimum required configuration of scd2_plus materialization and one time load (create table only) testing"
+    config:
+      materialized: scd2_plus
+      unique_key: id
+      check_cols: [label, amount]
+      updated_at: source_system_updated_date
+      loaded_at: staging_load_date
+    data_tests:
+      - versioned_scd.scd2_plus_validation:
+          unique_key: id
+          scd_valid_from_col_name: valid_from
+          scd_valid_to_col_name:  valid_to
+      - dbt_utils.equality:
+          compare_model: ref('dim_scd2_plus_min_config_test_data')
+          compare_columns:
+            - scd_id
+            - valid_from
+            - valid_to
+            - record_version
+            - id
+            - label
+            - amount
+            - component_name
+            - date_of_birth
+            - component_description
+          precision: 4
+  - name: dim_scd2_plus_min_config_incremental_load
+    description: "To demo minimum required configuration of scd2_plus materialization and incremental load (create table and insert + updates) testing"
+    config:
+      materialized: scd2_plus
+      unique_key: id
+      check_cols: [label, amount]
+      updated_at: source_system_updated_date
+      loaded_at: staging_load_date
+    data_tests:
+      - versioned_scd.scd2_plus_validation:
+          unique_key: id
+          scd_valid_from_col_name: valid_from
+          scd_valid_to_col_name: valid_to
+      - dbt_utils.equality:
+          compare_model: ref('dim_scd2_plus_min_config_test_data')
+          compare_columns:
+            - scd_id
+            - valid_from
+            - valid_to
+            - record_version
+            - id
+            - label
+            - amount
+            - component_name
+            - date_of_birth
+            - component_description
+          precision: 4
+  - name: dim_scd2_plus_full_config_one_time_load
+    description: "To demo the full configuration of scd2_plus materialization and one time load (create table only) testing"
+    config:
+      materialized: scd2_plus
+      unique_key: id
+      check_cols: [label, amount]
+      updated_at: source_system_updated_date
+      punch_thru_cols: [component_name, date_of_birth]
+      update_cols: [component_description]
+      loaded_at: staging_load_date
+      scd_id_col_name: component_id
+      scd_valid_from_col_name: valid_from_dt
+      scd_valid_to_col_name: valid_to_dt
+      scd_record_version_col_name: version
+      scd_loaddate_col_name: loaded_at
+      scd_updatedate_col_name: updated_at
+      scd_valid_from_min_date: '1900-01-01'
+      scd_valid_to_max_date: '3000-01-01'
+    data_tests:
+      - versioned_scd.scd2_plus_validation:
+          unique_key: id
+          scd_valid_from_col_name: valid_from_dt
+          scd_valid_to_col_name:  valid_to_dt
+      - dbt_utils.equality:
+          compare_model: ref('dim_scd2_plus_full_config_test_data')
+          compare_columns:
+            - scd_id
+            - valid_from_dt
+            - valid_to_dt
+            - record_version
+            - id
+            - label
+            - amount
+            - component_name
+            - date_of_birth
+            - component_description
+          precision: 4
+  - name: dim_scd2_plus_full_config_incremental_load
+    description: "To demo the full configuration of scd2_plus materialization and incremental load (create table and insert + updates) testing"
+    config:
+      materialized: scd2_plus
+      unique_key: id
+      check_cols: [label, amount]
+      updated_at: source_system_updated_date
+      punch_thru_cols: [component_name, date_of_birth]
+      update_cols: [component_description]
+      loaded_at: staging_load_date
+      scd_id_col_name: component_id
+      scd_valid_from_col_name: valid_from_dt
+      scd_valid_to_col_name: valid_to_dt
+      scd_record_version_col_name: version
+      scd_loaddate_col_name: loaded_at
+      scd_updatedate_col_name: updated_at
+      scd_valid_from_min_date: '1900-01-01'
+      scd_valid_to_max_date: '3000-01-01'
+    data_tests:
+      - versioned_scd.scd2_plus_validation:
+          unique_key: id
+          scd_valid_from_col_name: valid_from_dt
+          scd_valid_to_col_name:  valid_to_dt
+      - dbt_utils.equality:
+          compare_model: ref('dim_scd2_plus_full_config_test_data')
+          compare_columns:
+            - scd_id
+            - valid_from_dt
+            - valid_to_dt
+            - record_version
+            - id
+            - label
+            - amount
+            - component_name
+            - date_of_birth
+            - component_description
+          precision: 4
