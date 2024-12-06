@@ -1,0 +1,36 @@
+repos:
+- repo: https://github.com/sqlfluff/sqlfluff
+  rev: 3.2.5
+  hooks:
+    - id: sqlfluff-fix
+      name: sqlfluff-fix-sql
+      additional_dependencies: ['dbt-core==1.8.8', 'dbt-postgres==1.8.2', 'sqlfluff-templater-dbt']
+      files: '^src/integration_tests/models/.*\.sql$'  # Only target .sql files in a models/ folder
+    - id: sqlfluff-fix
+      name: sqlfluff-fix-jinja
+      args: ["--templater", "jinja", "--dialect", "postgres"]
+      files: '^src/integration_tests/macros/.*\.sql$'
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+    - id: check-added-large-files
+    - id: check-toml
+    - id: check-case-conflict
+    - id: check-merge-conflict
+    - id: check-json
+    - id: check-yaml
+      files: '\.yml$|\.yaml$' # Only target .yaml/.yml files
+    - id: check-symlinks
+    - id: destroyed-symlinks
+    - id: fix-byte-order-marker
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+
+- repo: https://github.com/Lucas-C/pre-commit-hooks
+  rev: v1.5.5
+  hooks:
+    - id: forbid-crlf
+    - id: remove-crlf
+    - id: forbid-tabs
+    - id: remove-tabs
