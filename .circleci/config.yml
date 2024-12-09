@@ -20,13 +20,12 @@ jobs:
       - run: &pip-install-uv
           name: Install uv and sync the requirements
           command: |
-            pip install uv
-            uv sync
-            uv run __init__.py
+            python -m pip install uv
+            uv sync --lockfile uv.lock
 
       - run: &dbt-deps
           name: Install dbt dependencies
-          command: dbt deps --project-dir $DBT_PROJECT_DIR
+          command: uv dbt deps --project-dir $DBT_PROJECT_DIR
 
       - run:
           name: "Run tests - Postgres"
@@ -37,7 +36,7 @@ jobs:
             POSTGRES_TEST_PORT: 5432
             POSTGRES_TEST_DATABASE: circle_test
             POSTGRES_TEST_SCHEMA: versioned_scd_integration_tests
-          command: dbt build -t postgres --project-dir $DBT_PROJECT_DIR
+          command: uv dbt build -t postgres --project-dir $DBT_PROJECT_DIR
 
       - run:
           name: "Set up GCP credentials"
@@ -50,15 +49,15 @@ jobs:
 
       - run:
           name: "Run tests - BigQuery"
-          command: dbt build -t bigquery --project-dir $DBT_PROJECT_DIR
+          command: uv dbt build -t bigquery --project-dir $DBT_PROJECT_DIR
 
       - run:
           name: "Run tests - Snowflake"
-          command: dbt build -t snowflake --project-dir $DBT_PROJECT_DIR
+          command: uv dbt build -t snowflake --project-dir $DBT_PROJECT_DIR
 
       - run:
           name: "Run tests - DuckDB"
-          command: dbt build -t duckdb --project-dir $DBT_PROJECT_DIR
+          command: uv dbt build -t duckdb --project-dir $DBT_PROJECT_DIR
 
       - store_artifacts:
           path: ./logs
